@@ -44,7 +44,7 @@ func (itf *RawInterface) Send(f CanFrame) error {
 }
 
 func (itf *RawInterface) Receive() (CanFrame, error) {
-	f := CanFrame{}
+	f := CanFrame{Data:make([]byte,8)}
 	frameBytes := make([]byte, 16)
 	_, err := unix.Read(itf.fd, frameBytes)
 	if err != nil {
