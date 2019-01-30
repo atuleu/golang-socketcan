@@ -27,7 +27,7 @@ func (f CanFrame) putID(buf []byte) {
 	binary.LittleEndian.PutUint32(buf[0:4], f.ID)
 }
 
-func (f CanFrame) getID(buf []byte) {
+func (f *CanFrame) getID(buf []byte) {
 	f.ID = uint32(binary.LittleEndian.Uint32(buf[0:4]))
 
 	if f.ID&unix.CAN_RTR_FLAG != 0 {
