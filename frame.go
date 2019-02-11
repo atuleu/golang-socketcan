@@ -1,10 +1,6 @@
 package socketcan
 
-import (
-	"encoding/binary"
-
-	"golang.org/x/sys/unix"
-)
+import "encoding/binary"
 
 type CanFrame struct {
 	ID       uint32
@@ -16,12 +12,12 @@ type CanFrame struct {
 
 func (f CanFrame) putID(buf []byte) {
 	if f.Extended == true {
-		f.ID = f.ID & unix.CAN_EFF_MASK
+		f.ID = f.ID & CAN_EFF_MASK
 	} else {
-		f.ID = f.ID & unix.CAN_SFF_MASK
+		f.ID = f.ID & CAN_SFF_MASK
 	}
 	if f.RTR {
-		f.ID |= unix.CAN_RTR_FLAG
+		f.ID |= CAN_RTR_FLAG
 	}
 
 	binary.LittleEndian.PutUint32(buf[0:4], f.ID)
@@ -30,17 +26,17 @@ func (f CanFrame) putID(buf []byte) {
 func (f *CanFrame) getID(buf []byte) {
 	f.ID = uint32(binary.LittleEndian.Uint32(buf[0:4]))
 
-	if f.ID&unix.CAN_RTR_FLAG != 0 {
+	if f.ID&CAN_RTR_FLAG != 0 {
 		f.RTR = true
 	} else {
 		f.RTR = false
 	}
 
-	if f.ID&unix.CAN_EFF_FLAG != 0 {
-		f.ID &= unix.CAN_EFF_MASK
+	if f.ID&CAN_EFF_FLAG != 0 {
+		f.ID &= CAN_EFF_MASK
 		f.Extended = true
 	} else {
-		f.ID &= unix.CAN_SFF_MASK
+		f.ID &= CAN_SFF_MASK
 		f.Extended = false
 	}
 }
