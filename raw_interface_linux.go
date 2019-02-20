@@ -2,17 +2,17 @@ package socketcan
 
 import "golang.org/x/sys/unix"
 
-type RawInterface struct {
+type rawInterface struct {
 	fd   int
-	Name string
+	name string
 }
 
-func (itf *RawInterface) SocketFD() int {
+func (itf *rawInterface) SocketFD() int {
 	return itf.fd
 }
 
-func NewRawInterface(ifName string) (*RawInterface, error) {
-	res := &RawInterface{Name: ifName}
+func NewRawInterface(ifName string) (RawInterface, error) {
+	res := &rawInterface{name: ifName}
 	var err error
 	res.fd, err = unix.Socket(unix.AF_CAN, unix.SOCK_RAW, unix.CAN_RAW)
 	if err != nil {
@@ -30,11 +30,11 @@ func NewRawInterface(ifName string) (*RawInterface, error) {
 	return res, err
 }
 
-func (itf *RawInterface) Close() error {
+func (itf *rawInterface) Close() error {
 	return unix.Close(itf.fd)
 }
 
-func (itf *RawInterface) Send(f CanFrame) error {
+func (itf *rawInterface) Send(f CanFrame) error {
 	frameBytes := make([]byte, 16)
 	f.putID(frameBytes)
 	frameBytes[4] = f.Dlc
@@ -43,8 +43,8 @@ func (itf *RawInterface) Send(f CanFrame) error {
 	return err
 }
 
-func (itf *RawInterface) Receive() (CanFrame, error) {
-	f := CanFrame{Data:make([]byte,8)}
+func (itf *rawInterface) Receive() (CanFrame, error) {
+	f := CanFrame{Data: make([]byte, 8)}
 	frameBytes := make([]byte, 16)
 	_, err := unix.Read(itf.fd, frameBytes)
 	if err != nil {
