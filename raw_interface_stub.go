@@ -27,3 +27,7 @@ func (itf *rawInterfaceStub) Receive() (CanFrame, error) {
 	select {}
 	return f, nil
 }
+
+func IsClosedInterfaceError(err error) bool {
+	return false
+}

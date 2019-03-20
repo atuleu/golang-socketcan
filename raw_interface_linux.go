@@ -1,6 +1,10 @@
 package socketcan
 
-import "golang.org/x/sys/unix"
+import (
+	"syscall"
+
+	"golang.org/x/sys/unix"
+)
 
 type rawInterface struct {
 	fd   int
@@ -56,4 +60,12 @@ func (itf *rawInterface) Receive() (CanFrame, error) {
 	copy(f.Data, frameBytes[8:])
 
 	return f, nil
+}
+
+func IsClosedInterfaceError(err error) bool {
+	errno, ok := err.(syscall.Errno)
+	if ok == false {
+		return false
+	}
+	return errno == syscall.EBADF || errno == syscall.ENETDOWN || errno == syscall.ENODEV
 }
