@@ -43,3 +43,9 @@ func IoctlGetIfIndex(fd int, ifNameRaw []byte) (int, error) {
 
 	return ifReq.Index, nil
 }
+
+func IoctlGetTimeval(fd int) (*syscall.Timeval, error) {
+	var value syscall.Timeval
+	err := ioctlPtr(fd, syscall.SIOCGSTAMP, unsafe.Pointer(&value));
+	return &value, err
+}
