@@ -62,6 +62,21 @@ func (itf *rawInterface) Receive() (CanFrame, error) {
 	return f, nil
 }
 
+/** Request the timestamp for the last read CAN frame.
+ *  This method must be called immediately after the last
+ *  frame was read.
+ * @return The timestamp is in CLOCK_MONOTONIC domain in
+ *    nanoseconds.
+ */
+func (itf *rawInterface) GetTimestamp() (int64, error) {
+	timeVal, err := IoctlGetTimeval(itf.fd)
+	if err != nil {
+		return -1, err
+	}
+
+	return timeVal.Nano(), nil
+}
+
 func IsClosedInterfaceError(err error) bool {
 	errno, ok := err.(syscall.Errno)
 	if ok == false {
