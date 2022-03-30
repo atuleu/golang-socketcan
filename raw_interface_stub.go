@@ -28,6 +28,10 @@ func (itf *rawInterfaceStub) Receive() (CanFrame, error) {
 	return f, nil
 }
 
+func (itf *rawInterface) GetTimestamp() (int64, error) {
+	return 0, nil;
+}
+
 func IsClosedInterfaceError(err error) bool {
 	return false
 }
