@@ -19,6 +19,9 @@ func (f CanFrame) putID(buf []byte) {
 	if f.RTR {
 		f.ID |= CAN_RTR_FLAG
 	}
+	if f.Extended {
+		f.ID |= CAN_EFF_FLAG
+	} 
 
 	binary.LittleEndian.PutUint32(buf[0:4], f.ID)
 }
