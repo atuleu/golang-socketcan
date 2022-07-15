@@ -2,7 +2,6 @@ package socketcan
 
 import (
 	"syscall"
-
 	"golang.org/x/sys/unix"
 )
 
@@ -80,10 +79,12 @@ func (itf *rawInterface) Addfilter(rfilter []CanFilter) error {
 		return nil
 	}
 
-	unix.setsockopt(ift.fd, unix.SOL_CAN_RAW, unix.CAN_RAW_FILTER, &rfilter, len(rfilter))
+	err := syscall.Setsockopt(itf.fd, syscall.SOL_CAN_RAW, syscall.CAN_RAW_FILTER, &rfilter, len(rfilter))
+	if err != nil {
+		return err
+	}
+
 	join_filter := 1
-	unix.setsockopt(ift.fd, unix.SOL_CAN_RAW, unix.CAN_RAW_JOIN_FILTERS, &join_filter, 4)
 
-	return nil
+	return syscall.Setsockopt(itf.fd, syscall.SOL_CAN_RAW, syscall.CAN_RAW_JOIN_FILTERS, &join_filter, 4)
 }
-
