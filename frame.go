@@ -12,10 +12,12 @@ type CanFrame struct {
 
 func (f CanFrame) putID(buf []byte) {
 	if f.Extended == true {
-		f.ID = f.ID & CAN_EFF_MASK
+		f.ID &= CAN_EFF_MASK
+		f.ID |= CAN_EFF_FLAG
 	} else {
-		f.ID = f.ID & CAN_SFF_MASK
+		f.ID &= CAN_SFF_MASK
 	}
+
 	if f.RTR {
 		f.ID |= CAN_RTR_FLAG
 	}
