@@ -68,7 +68,3 @@ func IsClosedInterfaceError(err error) bool {
 	}
 	return errno == syscall.EBADF || errno == syscall.ENETDOWN || errno == syscall.ENODEV
 }
-
-func (itf *rawInterface) AddfilterPass(canid_pass uint) error {
-	return  can_filter_pass(itf.fd, canid_pass)
-}

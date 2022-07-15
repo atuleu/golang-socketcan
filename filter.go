@@ -61,6 +61,8 @@ import "C"
 import (
 	"errors"
 )
+
+
 /*
 *const uint can_id_reject[] = {0x123, 0x11111678, 0x282};	//除这三种canid之外的报文，都接收
 canRcvFiltersSet(canfd, can_id_reject, sizeof(can_id_reject)/sizeof(uint), CAN_FILTER_REJECT);
@@ -69,8 +71,8 @@ canRcvFiltersSet(canfd, can_id_reject, sizeof(can_id_reject)/sizeof(uint), CAN_F
 canRcvFiltersSet(canfd, can_id_pass, sizeof(can_id_pass)/sizeof(uint), CAN_FILTER_PASS);
 */
 
-func can_filter_pass(fd int, canid_pass uint ) error {
-	succ := C.rcvFiltersSet(C.int(fd), C.uint(canid_pass), C.CAN_FILTER_PASS)
+func (itf *rawInterface) AddfilterPass(canid_pass uint) error {
+	succ := C.rcvFiltersSet(C.int(itf.fd), C.uint(canid_pass), C.CAN_FILTER_PASS)
 	if succ == 0 {
 		return nil
 	}
