@@ -4,4 +4,5 @@ type RawInterface interface {
 	Send(CanFrame) error
 	Receive() (CanFrame, error)
 	Close() error
+ 	AddfilterPass(uint) error
 }
