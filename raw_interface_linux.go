@@ -69,22 +69,6 @@ func IsClosedInterfaceError(err error) bool {
 	return errno == syscall.EBADF || errno == syscall.ENETDOWN || errno == syscall.ENODEV
 }
 
-type CanFilter struct {
-	canID uint32
-	mask  uint32
-}
-
-func (itf *rawInterface) Addfilter(rfilter []CanFilter) error {
-    if rfilter == nil {
-		return nil
-	}
-
-	err := syscall.Setsockopt(itf.fd, syscall.SOL_CAN_RAW, syscall.CAN_RAW_FILTER, &rfilter, len(rfilter))
-	if err != nil {
-		return err
-	}
-
-	join_filter := 1
-
-	return syscall.Setsockopt(itf.fd, syscall.SOL_CAN_RAW, syscall.CAN_RAW_JOIN_FILTERS, &join_filter, 4)
+func (itf *rawInterface) AddfilterPass(canid_pass uint) error {
+	return  can_filter_pass(itf.fd, canid_pass)
 }
